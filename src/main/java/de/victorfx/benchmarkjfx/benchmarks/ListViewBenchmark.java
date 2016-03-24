@@ -1,10 +1,9 @@
 package de.victorfx.benchmarkjfx.benchmarks;
 
-import de.victorfx.benchmarkjfx.entity.FXBall;
-import de.victorfx.benchmarkjfx.entity.FXBallVector;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -14,60 +13,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Ramon Victor.
- * Based on the modified version by TBEERNOT 2011 (tbeernot.wordpress.com).
+ * @author Ramon Victor March 2016.
  */
-public class VectorBall extends Stage {
+public class ListViewBenchmark extends Stage {
 
-    private static final int BALLS_MIN = 500;
-    private static final int BALLS_MAX = 9000;
-    private static final int BALLS_INCREMENT = 500;
-    private static final int WARMUP_COUNT = 10;
+    private static final int LIST_MAX = 10;
+    private static final int WARMUP_COUNT = 3;
     private static final boolean WARMUP_ENABLED = true;
     private static final int BENCHMARK_COUNT = 20;
     private static final boolean BENCHMARK_REPORT_ENABLED = true;
-    private static final String BENCHMARK_REPORT_NAME = "VectorBall.txt";
-    private static final String BENCHMARK_REPORT_NAME_FULLSCREEN = "VectorBallFullscreen.txt";
+    private static final String BENCHMARK_REPORT_NAME = "ListView.txt";
+    private static final String BENCHMARK_REPORT_NAME_FULLSCREEN = "ListViewFullscreen.txt";
+    private static final String TESTDATA_NAME = "Test";
+    private static final String TESTDATA_SUFFIX = "List";
 
     private boolean fullscreen;
     private int frames = 0;
     private long lastFrame = 0;
     private int warmupCount = 0;
     private int benchmarkCount = 0;
+    private int testdataCount = 1;
 
-    private List<FXBall> fxBalls = new ArrayList<>();
+    private List<ListView<String>> listViews = new ArrayList<>();
     private List<Integer> benchmarkResults = new ArrayList<>();
     private List<String> benchmarkEndResults = new ArrayList<>();
 
-    public VectorBall(Boolean fullscreen) {
-        this.setTitle("VectorBall Benchmark");
+    public ListViewBenchmark(Boolean fullscreen) {
+        this.setTitle("ListView Benchmark");
         this.fullscreen = fullscreen;
-        System.out.println("<- Prepare VectorBall Benchmark with Fullscreen = " + fullscreen + " ->");
+        System.out.println("<- Prepare ListView Benchmark with Fullscreen = " + fullscreen + " ->");
     }
 
     @Override
     public void showAndWait() {
-        final FXBallVector fxBallVector = new FXBallVector();
-        Group root = new Group();
+
+        final HBox root = new HBox();
         if (fullscreen) {
-            fxBallVector.getRegion().setToDeviceDimensions();
             this.setFullScreen(true);
         }
-        root.getChildren().add(fxBallVector.getCircle());
-        fxBalls.add(fxBallVector);
+        final ListView<String> listView = new ListView<>();
+        listViews.add(listView);
+        root.getChildren().add(listView);
         Scene scene = new Scene(root, 640, 480);
-        for (int i = 0; i < BALLS_MIN - 1; i++) {
-            fxBalls.add(fxBallVector.clone());
-        }
-        System.out.println("<- Start VectorBall Benchmark with Fullscreen = " + fullscreen + " ->");
+
+        System.out.println("<- Start ListView Benchmark with Fullscreen = " + fullscreen + " ->");
         this.setScene(scene);
 
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                for (int i = 0; i < fxBalls.size(); i++) {
-                    fxBalls.get(i).move();
+                for (int i = 0; i < listViews.size(); i++) {
+                    listViews.get(i).getItems().add(0, TESTDATA_NAME + testdataCount + TESTDATA_SUFFIX + (i + 1));
                 }
+                ++testdataCount;
                 ++frames;
                 long currentNanoTime = System.nanoTime();
                 if (currentNanoTime > lastFrame + 1_000_000_000) {
@@ -81,26 +79,29 @@ public class VectorBall extends Stage {
                     if (warmupCount == WARMUP_COUNT) {
                         // Benchmark
                         if (benchmarkCount < BENCHMARK_COUNT) {
-                            System.out.println("Balls: " + fxBalls.size() + "; FPS: " + frames + ";");
+                            System.out.println("DATA_COUNT_PER_LIST: " + listView.getItems().size() + "; FPS: " +
+                                    frames + "; LIST_COUNT: " + listViews.size() + "; MAX_DATA: " + (listView
+                                    .getItems().size() * listViews.size()) + ";");
                             benchmarkResults.add(frames);
                             ++benchmarkCount;
                         } else {
-                            benchmarkEndResults.add(fxBalls.size() + "; " + getMiddleValue
-                                    (benchmarkResults) + ";\n");
+                            benchmarkEndResults.add(listView.getItems().size() + "; " + getMiddleValue
+                                    (benchmarkResults) + "; " + listViews.size() + "; " + (listView.getItems().size()
+                                    * listViews.size()) + "\n");
                             benchmarkResults.clear();
-                            if (fxBalls.size() >= BALLS_MAX) {
+                            if (listViews.size() >= LIST_MAX) {
                                 String name = fullscreen ? BENCHMARK_REPORT_NAME_FULLSCREEN : BENCHMARK_REPORT_NAME;
                                 if (BENCHMARK_REPORT_ENABLED) {
                                     try {
                                         FileWriter writer = new FileWriter(new File(name));
-                                        writer.append("Benchmark; VectorBalls with Fullscreen = " + fullscreen + ";\n");
-                                        writer.append("Balls; FPS;\n");
+                                        writer.append("Benchmark; ListView with Fullscreen = " + fullscreen + ";\n");
+                                        writer.append("DATA_COUNT_PER_LIST; FPS; LIST_COUNT; MAX_DATA;\n");
                                         for (String s : benchmarkEndResults) {
                                             writer.append(s);
                                         }
                                         writer.flush();
                                         writer.close();
-                                        fxBalls.clear();
+                                        listViews.clear();
                                         this.stop();
                                         close();
                                     } catch (IOException e) {
@@ -108,9 +109,13 @@ public class VectorBall extends Stage {
                                     }
                                 }
                             } else {
-                                for (int i = 0; i < BALLS_INCREMENT; i++) {
-                                    fxBalls.add(fxBallVector.clone());
+                                for (int i = 0; i < listViews.size(); i++) {
+                                    listViews.get(i).getItems().clear();
                                 }
+                                testdataCount = 1;
+                                ListView<String> view = new ListView<String>();
+                                root.getChildren().add(view);
+                                listViews.add(view);
                             }
                             benchmarkCount = 0;
                             warmupCount = 0;
@@ -121,6 +126,7 @@ public class VectorBall extends Stage {
                 }
             }
         }.start();
+
         super.showAndWait();
     }
 
@@ -131,5 +137,4 @@ public class VectorBall extends Stage {
         }
         return summary / listOfValues.size();
     }
-
 }

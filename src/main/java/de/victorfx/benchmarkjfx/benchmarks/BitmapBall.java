@@ -43,6 +43,7 @@ public class BitmapBall extends Stage {
     private List<String> benchmarkEndResults = new ArrayList<>();
 
     public BitmapBall(Boolean fullscreen) {
+        this.setTitle("BitmapBall Benchmark");
         this.fullscreen = fullscreen;
         System.out.println("<- Prepare BitmapBall Benchmark with Fullscreen = " + fullscreen + " ->");
     }
