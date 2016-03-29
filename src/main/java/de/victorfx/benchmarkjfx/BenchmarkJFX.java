@@ -1,5 +1,6 @@
 package de.victorfx.benchmarkjfx;
 
+import de.victorfx.benchmarkjfx.benchmarks.AreaChartBenchmark;
 import de.victorfx.benchmarkjfx.benchmarks.BitmapBall;
 import de.victorfx.benchmarkjfx.benchmarks.ListViewBenchmark;
 import de.victorfx.benchmarkjfx.benchmarks.VectorBall;
@@ -35,6 +36,8 @@ public class BenchmarkJFX extends Application {
         benchmarkList.add(new BitmapBall(true));
         benchmarkList.add(new ListViewBenchmark(false));
         benchmarkList.add(new ListViewBenchmark(true));
+        benchmarkList.add(new AreaChartBenchmark(false));
+        benchmarkList.add(new AreaChartBenchmark(true));
 
         ProgressBar bar = getProgressBar(primaryStage);
         for (int i = 0; i < benchmarkList.size(); i++) {

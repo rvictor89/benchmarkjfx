@@ -1,1 +1,10 @@
 # BenchmarkJFX
+by Ramon Victor
+
+A simple to use benchmark for JavaFX 2.x and above.
+Includes the famous Bubblemark benchmark by Alexey Gavrilov (2007) and much more!
+Currently it contains the following benchmarks:
+- Bitmap (Bubblemark)
+- Vector (Bubblemark)
+- ListView
+- AreaChart
