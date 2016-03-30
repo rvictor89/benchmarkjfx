@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @author Ramon Victor.
- * Based on the modified version by TBEERNOT 2011 (tbeernot.wordpress.com).
+ *         Based on the modified version by TBEERNOT 2011 (tbeernot.wordpress.com).
  */
 public class VectorBall extends Stage {
 
@@ -29,15 +29,15 @@ public class VectorBall extends Stage {
     private static final String BENCHMARK_REPORT_NAME = "VectorBall.txt";
     private static final String BENCHMARK_REPORT_NAME_FULLSCREEN = "VectorBallFullscreen.txt";
 
-    private boolean fullscreen;
+    private final boolean fullscreen;
     private int frames = 0;
     private long lastFrame = 0;
     private int warmupCount = 0;
     private int benchmarkCount = 0;
 
-    private List<FXBall> fxBalls = new ArrayList<>();
-    private List<Integer> benchmarkResults = new ArrayList<>();
-    private List<String> benchmarkEndResults = new ArrayList<>();
+    private final List<FXBall> fxBalls = new ArrayList<>();
+    private final List<Integer> benchmarkResults = new ArrayList<>();
+    private final List<String> benchmarkEndResults = new ArrayList<>();
 
     public VectorBall(Boolean fullscreen) {
         this.setTitle("VectorBall Benchmark");
@@ -65,8 +65,8 @@ public class VectorBall extends Stage {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                for (int i = 0; i < fxBalls.size(); i++) {
-                    fxBalls.get(i).move();
+                for (FXBall fxBall : fxBalls) {
+                    fxBall.move();
                 }
                 ++frames;
                 long currentNanoTime = System.nanoTime();
@@ -93,7 +93,8 @@ public class VectorBall extends Stage {
                                 if (BENCHMARK_REPORT_ENABLED) {
                                     try {
                                         FileWriter writer = new FileWriter(new File(name));
-                                        writer.append("Benchmark; VectorBalls with Fullscreen = " + fullscreen + ";\n");
+                                        writer.append("Benchmark; VectorBalls with Fullscreen = ").append(String
+                                                .valueOf(fullscreen)).append(";\n");
                                         writer.append("Balls; FPS;\n");
                                         for (String s : benchmarkEndResults) {
                                             writer.append(s);
@@ -126,8 +127,8 @@ public class VectorBall extends Stage {
 
     private double getMiddleValue(List<Integer> listOfValues) {
         int summary = 0;
-        for (int i = 0; i < listOfValues.size(); i++) {
-            summary += listOfValues.get(i);
+        for (Integer listOfValue : listOfValues) {
+            summary += listOfValue;
         }
         return summary / listOfValues.size();
     }

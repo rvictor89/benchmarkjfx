@@ -27,16 +27,16 @@ public class ListViewBenchmark extends Stage {
     private static final String TESTDATA_NAME = "Test";
     private static final String TESTDATA_SUFFIX = "List";
 
-    private boolean fullscreen;
+    private final boolean fullscreen;
     private int frames = 0;
     private long lastFrame = 0;
     private int warmupCount = 0;
     private int benchmarkCount = 0;
     private int testdataCount = 1;
 
-    private List<ListView<String>> listViews = new ArrayList<>();
-    private List<Integer> benchmarkResults = new ArrayList<>();
-    private List<String> benchmarkEndResults = new ArrayList<>();
+    private final List<ListView<String>> listViews = new ArrayList<>();
+    private final List<Integer> benchmarkResults = new ArrayList<>();
+    private final List<String> benchmarkEndResults = new ArrayList<>();
 
     public ListViewBenchmark(Boolean fullscreen) {
         this.setTitle("ListView Benchmark");
@@ -94,7 +94,8 @@ public class ListViewBenchmark extends Stage {
                                 if (BENCHMARK_REPORT_ENABLED) {
                                     try {
                                         FileWriter writer = new FileWriter(new File(name));
-                                        writer.append("Benchmark; ListView with Fullscreen = " + fullscreen + ";\n");
+                                        writer.append("Benchmark; ListView with Fullscreen = ").append(String.valueOf
+                                                (fullscreen)).append(";\n");
                                         writer.append("DATA_COUNT_PER_LIST; FPS; LIST_COUNT; MAX_DATA;\n");
                                         for (String s : benchmarkEndResults) {
                                             writer.append(s);
@@ -109,11 +110,11 @@ public class ListViewBenchmark extends Stage {
                                     }
                                 }
                             } else {
-                                for (int i = 0; i < listViews.size(); i++) {
-                                    listViews.get(i).getItems().clear();
+                                for (ListView<String> listView1 : listViews) {
+                                    listView1.getItems().clear();
                                 }
                                 testdataCount = 1;
-                                ListView<String> view = new ListView<String>();
+                                ListView<String> view = new ListView<>();
                                 root.getChildren().add(view);
                                 listViews.add(view);
                             }
@@ -132,8 +133,8 @@ public class ListViewBenchmark extends Stage {
 
     private double getMiddleValue(List<Integer> listOfValues) {
         int summary = 0;
-        for (int i = 0; i < listOfValues.size(); i++) {
-            summary += listOfValues.get(i);
+        for (Integer listOfValue : listOfValues) {
+            summary += listOfValue;
         }
         return summary / listOfValues.size();
     }

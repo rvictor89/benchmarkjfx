@@ -5,14 +5,12 @@ package de.victorfx.benchmarkjfx.entity;
  * Based on the modified version by TBEERNOT 2011 (tbeernot.wordpress.com).
  */
 public class FXBall {
-    private BallRegion region = new BallRegion();
+    private final BallRegion region = new BallRegion();
     protected double x = 0;
     protected double y = 0;
-    protected double vx = 0;
-    protected double vy = 0;
-    protected double r = 0;
-    protected double d = 0;
-    protected double d2 = 0;
+    private double vx = 0;
+    private double vy = 0;
+    private double d = 0;
 
     public FXBall() {
         this.x = (region.getInsets().right - region.getInsets().left - 2 * region.getBallRadius()) * Math.random();
@@ -44,7 +42,4 @@ public class FXBall {
         return region;
     }
 
-    public void setRegion(BallRegion region) {
-        this.region = region;
-    }
 }

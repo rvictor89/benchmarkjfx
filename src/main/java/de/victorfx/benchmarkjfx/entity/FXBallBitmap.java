@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
  * Based on the modified version by TBEERNOT 2011 (tbeernot.wordpress.com).
  */
 public class FXBallBitmap extends FXBall {
-    private ImageView imageView;
+    private final ImageView imageView;
 
     public FXBallBitmap(Image image) {
         this.imageView = new ImageView(image);
@@ -27,6 +27,7 @@ public class FXBallBitmap extends FXBall {
         this.imageView.setY(this.y);
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public FXBallBitmap clone() {
         FXBallBitmap fxBallBitmap = new FXBallBitmap(imageView.getImage());
@@ -35,7 +36,4 @@ public class FXBallBitmap extends FXBall {
         return fxBallBitmap;
     }
 
-    public void remove() {
-        ((Group) imageView.getParent()).getChildren().remove(imageView);
-    }
 }

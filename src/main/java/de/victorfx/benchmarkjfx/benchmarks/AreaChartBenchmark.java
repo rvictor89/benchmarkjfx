@@ -31,18 +31,18 @@ public class AreaChartBenchmark extends Stage {
     private static final String BENCHMARK_REPORT_NAME = "AreaChart.txt";
     private static final String BENCHMARK_REPORT_NAME_FULLSCREEN = "AreaChartFullscreen.txt";
 
-    private boolean fullscreen;
+    private final boolean fullscreen;
     private int frames = 0;
     private long lastFrame = 0;
     private int warmupCount = 0;
     private int benchmarkCount = 0;
 
-    private List<Integer> benchmarkResults = new ArrayList<>();
-    private List<String> benchmarkEndResults = new ArrayList<>();
-    private List<XYChart.Series<Number, Number>> series = new ArrayList<>();
-    private Collection<XYChart.Data<Number, Number>> dataDefault = new ArrayList<>();
+    private final List<Integer> benchmarkResults = new ArrayList<>();
+    private final List<String> benchmarkEndResults = new ArrayList<>();
+    private final List<XYChart.Series<Number, Number>> series = new ArrayList<>();
+    private final Collection<XYChart.Data<Number, Number>> dataDefault = new ArrayList<>();
 
-    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    private final GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     public AreaChartBenchmark(Boolean fullscreen) {
         this.setTitle("AreaChart Benchmark");
@@ -88,8 +88,9 @@ public class AreaChartBenchmark extends Stage {
                 long currentNanoTime = System.nanoTime();
                 if (currentNanoTime > lastFrame + 1_000_000_000) {
                     //changes the data every second of all series
-                    for (int i = 0; i < series.size(); i++) {
-                        for (XYChart.Data data : series.get(i).getData()) {
+                    for (XYChart.Series<Number, Number> sery : series) {
+                        for (XYChart.Data data : sery.getData()) {
+                            //noinspection unchecked
                             data.setYValue(Math.random() * 100);
                         }
                     }
@@ -114,7 +115,8 @@ public class AreaChartBenchmark extends Stage {
                                 if (BENCHMARK_REPORT_ENABLED) {
                                     try {
                                         FileWriter writer = new FileWriter(new File(name));
-                                        writer.append("Benchmark; AreaChart with Fullscreen = " + fullscreen + ";\n");
+                                        writer.append("Benchmark; AreaChart with Fullscreen = ").append(String
+                                                .valueOf(fullscreen)).append(";\n");
                                         writer.append("FPS; SERIES_COUNT;\n");
                                         for (String s : benchmarkEndResults) {
                                             writer.append(s);
@@ -151,8 +153,8 @@ public class AreaChartBenchmark extends Stage {
 
     private double getMiddleValue(List<Integer> listOfValues) {
         int summary = 0;
-        for (int i = 0; i < listOfValues.size(); i++) {
-            summary += listOfValues.get(i);
+        for (Integer listOfValue : listOfValues) {
+            summary += listOfValue;
         }
         return summary / listOfValues.size();
     }

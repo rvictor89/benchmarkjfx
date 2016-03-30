@@ -42,7 +42,7 @@ public class BenchmarkJFX extends Application {
         ProgressBar bar = getProgressBar(primaryStage);
         for (int i = 0; i < benchmarkList.size(); i++) {
             if (benchmarkList.size() != 0) {
-                bar.setProgress(Double.valueOf(i) / Double.valueOf(benchmarkList.size()));
+                bar.setProgress((double) i / (double) benchmarkList.size());
             }
             benchmarkList.get(i).showAndWait();
             Thread.sleep(2000);

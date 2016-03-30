@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class FXBallVector extends FXBall {
 
-    private Circle circle;
+    private final Circle circle;
 
     public FXBallVector() {
         List<Stop> stops = new ArrayList<>();
@@ -35,16 +35,13 @@ public class FXBallVector extends FXBall {
         circle.setTranslateY(this.y);
     }
 
+    @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public FXBallVector clone() {
         FXBallVector fxBallVector = new FXBallVector();
         fxBallVector.getRegion().setInsets(this.getRegion().getInsets());
         ((Group) circle.getParent()).getChildren().add(fxBallVector.circle);
         return fxBallVector;
-    }
-
-    public void remove() {
-        ((Group) circle.getParent()).getChildren().remove(circle);
     }
 
     public Circle getCircle() {

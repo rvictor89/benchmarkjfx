@@ -1,4 +1,4 @@
-# BenchmarkJFX
+# BenchmarkJFX v1.0
 by Ramon Victor
 
 A simple to use benchmark for JavaFX 2.x and above.

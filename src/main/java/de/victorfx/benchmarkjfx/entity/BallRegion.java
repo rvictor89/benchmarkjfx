@@ -7,10 +7,10 @@ import java.awt.*;
  */
 public class BallRegion {
 
-    private GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    private final GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     private Insets insets;
-    private double ballRadius;
-    private double maxSpeed;
+    private final double ballRadius;
+    private final double maxSpeed;
 
     public BallRegion() {
         int width = 640;
@@ -37,10 +37,6 @@ public class BallRegion {
 
     public double getMaxSpeed() {
         return maxSpeed;
-    }
-
-    public void setMaxSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
     }
 
     public double getBallRadius() {
