@@ -8,3 +8,6 @@ Currently it contains the following benchmarks:
 - Vector (Bubblemark)
 - ListView
 - AreaChart
+
+##How-To-Use: 
+Start the application with the following argument: "javafx.animation.fullspeed=true" so the complete command should look like this: "java -Djavafx.animation.fullspeed=true benchmarkjfx-1.0.jar". This will deactivate vsync and the capped fps.
